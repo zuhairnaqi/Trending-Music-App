@@ -1,12 +1,12 @@
 import NavigationContainer from './NavigationContainer';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {identifyAuthUser} from '../../modules/Auth/store/auth.actions';
+import {requestAccessToken} from '../../modules/Auth/store/auth.actions';
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      identifyAuthUser,
+      requestAccessToken,
     },
     dispatch,
   );
@@ -14,7 +14,8 @@ const mapDispatchToProps = dispatch =>
 const mapStateToProps = state => {
   const {auth} = state;
   return {
-    token: auth.token,
+    isLoggedIn: auth.isLoggedIn,
+    authFailer: auth.authFailer,
   };
 };
 

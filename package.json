@@ -7,22 +7,29 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
+    "clean:android": "cd android && ./gradlew clean && cd ../",
+    "cra": "yarn clean:android && yarn android",
+    "pod:install": "cd ios && pod install && cd ..",
     "test": "jest"
   },
   "dependencies": {
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/stack": "^6.3.16",
+    "add": "^2.0.6",
     "mappersmith": "^2.42.0-beta.1",
     "most": "^1.9.0",
     "react": "18.2.0",
     "react-native": "0.71.8",
+    "react-native-config": "^1.5.1",
+    "react-native-device-country": "^1.0.4",
     "react-native-gesture-handler": "^2.10.1",
     "react-native-safe-area-context": "^4.5.3",
     "react-native-screens": "^3.20.0",
     "react-native-simple-toast": "^2.0.0",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
-    "redux-most": "^0.8.0"
+    "redux-most": "^0.8.0",
+    "yarn": "^1.22.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

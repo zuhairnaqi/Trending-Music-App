@@ -2,39 +2,37 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-const PlayListCard = ({data}) => {
+const PlayListCard = ({playlist}) => {
   const navigation = useNavigation();
   return (
-    <View style={styles.cardsContainer}>
-      {data.map((item, index) => {
-        return (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={0.7}
-            style={styles.subcontainer}
-            onPress={() => navigation.navigate('/Tracklist')}>
-            <View style={styles.imageWrapper}>
-              <Image source={item?.artist} alt="" style={styles.image} />
-            </View>
-            <View style={styles.details}>
-              <Text style={styles.title}>{item?.name}</Text>
-              <Text style={styles.tracks}>{item?.tracks} Tracks</Text>
-            </View>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.subcontainer}
+      onPress={() =>
+        navigation.navigate('/Tracklist', {
+          playlistName: playlist?.name,
+          playlistId: playlist.id,
+          imageURL: playlist?.images[0]?.url,
+        })
+      }>
+      <View style={styles.imageWrapper}>
+        <Image
+          source={{uri: playlist?.images[0]?.url}}
+          alt=""
+          style={styles.image}
+        />
+      </View>
+      <View style={styles.details}>
+        <Text style={styles.title}>{playlist?.name}</Text>
+        <Text style={styles.tracks}>{playlist?.tracks?.total} Tracks</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
 export default PlayListCard;
 
 const styles = StyleSheet.create({
-  cardsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-  },
   subcontainer: {
     justifyContent: 'center',
     alignItems: 'center',

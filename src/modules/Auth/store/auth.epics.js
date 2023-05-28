@@ -1,37 +1,46 @@
-import {combineEpics, select} from 'redux-most';
 import * as most from 'most';
-import {LOGIN, loginSuccess} from './auth.actions';
-import {callInProcess} from '../../../store/core/core.actions';
+import {combineEpics, select} from 'redux-most';
+import {
+  REQUEST_ACCESS_TOKEN,
+  requestAccessTokenSuccess,
+  requestAccessTokenFailure,
+} from './auth.actions';
 import {showToast} from '../../../store/toast/toast.actions';
-import {login} from '../../../core/services/auth/auth.services';
+import {getAccessToken} from '../../../core/services/auth/auth.services';
 import AuthenticationTokenHelper from '../../../core/helper/AuthenticationTokenHelper';
-import {navigate, resetStack} from '../../../navigation/RootNavigation';
 
-const loginEpic = ($actions, store) =>
-  $actions.thru(select(LOGIN)).flatMap(action => {
+const requestAccessTokenEpic = ($actions, store) =>
+  $actions.thru(select(REQUEST_ACCESS_TOKEN)).flatMap(action => {
+    const {clientId, clientSecretKey} = action.payload;
+    const payload = {
+      grant_type: 'client_credentials',
+      client_id: clientId,
+      client_secret: clientSecretKey,
+    };
     return most
-      .fromPromise(login(action.payload))
+      .fromPromise(getAccessToken(payload))
       .flatMap(response => {
-        const {token} = response;
-        AuthenticationTokenHelper.authToken = token;
-        resetStack({
-          index: 0,
-          routes: [{name: 'TabNavigator'}],
-        });
-        return most.from([
-          loginSuccess({
-            token,
-          }),
-          callInProcess(false),
-          showToast({
-            message: 'Login Successfully',
-            type: 'success',
-          }),
-        ]);
+        const {access_token, token_type} = response;
+        if (!access_token) {
+          return most.from([
+            requestAccessTokenFailure(
+              'Something went wrong, please try again later',
+            ),
+          ]);
+        }
+        AuthenticationTokenHelper.authToken = access_token;
+        AuthenticationTokenHelper.tokenType = token_type;
+        return most.of(requestAccessTokenSuccess());
       })
       .recoverWith(err => {
-        return most.of(callInProcess(false));
+        const responseData = JSON.parse(err.responseData);
+        return most.from([
+          showToast({
+            message: 'Something went wrong, please try again later',
+          }),
+          requestAccessTokenFailure(responseData.error),
+        ]);
       });
   });
 
-export default combineEpics([loginEpic]);
+export default combineEpics([requestAccessTokenEpic]);

@@ -1,18 +1,17 @@
-export const LOGIN = 'LOGIN';
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const REQUEST_ACCESS_TOKEN = 'REQUEST_ACCESS_TOKEN';
+export const REQUEST_ACCESS_TOKEN_SUCCESS = 'REQUEST_ACCESS_TOKEN_SUCCESS';
+export const REQUEST_ACCESS_TOKEN_FAILURE = 'REQUEST_ACCESS_TOKEN_FAILURE';
 
-export const login = credential => ({
-  type: 'LOGIN',
-  payload: credential,
+export const requestAccessToken = payload => ({
+  type: REQUEST_ACCESS_TOKEN,
+  payload,
 });
 
-export const loginSuccess = token => ({
-  type: 'LOGIN_SUCCESS',
-  payload: token,
+export const requestAccessTokenSuccess = () => ({
+  type: REQUEST_ACCESS_TOKEN_SUCCESS,
 });
 
-export const loginFailure = ({error}) => ({
-  type: 'LOGIN_FAILURE',
-  payload: {error},
+export const requestAccessTokenFailure = errorMsg => ({
+  type: REQUEST_ACCESS_TOKEN_FAILURE,
+  payload: errorMsg,
 });

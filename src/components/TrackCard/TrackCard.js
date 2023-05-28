@@ -3,37 +3,33 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Play from '../../../assets/play.png';
 
-const TrackCard = ({data}) => {
+const TrackCard = ({item}) => {
   const navigation = useNavigation();
+  const {track} = item;
   return (
-    <View style={styles.cardsContainer}>
-      {data.map((item, index) => {
-        return (
-          <TouchableOpacity
-            key={index}
-            activeOpacity={0.7}
-            style={styles.subcontainer}
-            onPress={() => navigation.navigate('/TrackDetails')}>
-            <View style={styles.detailsWrap}>
-              <View style={styles.imageWrapper}>
-                <Image source={item?.image} alt="" style={styles.image} />
-              </View>
-              <View style={styles.details}>
-                <Text style={styles.title}>{item?.name}</Text>
-                <Text style={styles.tracks}>Singer: {item?.artistName}</Text>
-                <Text style={styles.tracks}>
-                  Popularity: {item?.popularity}
-                </Text>
-              </View>
-            </View>
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.subcontainer}
+      onPress={() => navigation.navigate('/TrackDetails', {trackId: track.id})}>
+      <View style={styles.detailsWrap}>
+        <View style={styles.imageWrapper}>
+          <Image
+            source={{uri: track?.album.images[0].url}}
+            alt=""
+            style={styles.image}
+          />
+        </View>
+        <View style={styles.details}>
+          <Text style={styles.title}>{track?.name}</Text>
+          <Text style={styles.tracks}>Singer: {track?.artists[0].name}</Text>
+          <Text style={styles.tracks}>Popularity: {track?.popularity}</Text>
+        </View>
+      </View>
 
-            <View style={styles.playImageWrapper}>
-              <Image source={Play} alt="" style={styles.playImage} />
-            </View>
-          </TouchableOpacity>
-        );
-      })}
-    </View>
+      <View style={styles.playImageWrapper}>
+        <Image source={Play} alt="" style={styles.playImage} />
+      </View>
+    </TouchableOpacity>
   );
 };
 

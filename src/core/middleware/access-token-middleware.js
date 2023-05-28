@@ -7,7 +7,7 @@ export const AccessTokenMiddleware = () => {
         request.enhance({
           headers: {
             Authorization: AuthenticationTokenHelper.authToken
-              ? `Bearer ${AuthenticationTokenHelper.authToken}`
+              ? `${AuthenticationTokenHelper.tokenType} ${AuthenticationTokenHelper.authToken}`
               : null,
             'Cache-Control': 'no-cache, no-store, must-revalidate',
             Pragma: 'no-cache',
